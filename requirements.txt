@@ -1,0 +1,8 @@
+requests
+cachetools
+urllib3
+beautifulsoup4
+fake_useragent
+cachetools
+python-dotenv
+logging

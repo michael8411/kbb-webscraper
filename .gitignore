@@ -1,4 +1,37 @@
+# .gitignore
+
+# Ignore Python bytecode files
 __pycache__/
+*.py[cod]
+
+# Ignore virtual environment directories
+venv/
+env/
+*.env
+
+# Ignore log files
+logs/
 *.log
-*.json
+
+# Ignore data files
+data/
+
+# Ignore environment variable files
 .env
+
+# Ignore config files with sensitive data (if any)
+src/config.ini
+
+# Ignore Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# Ignore test coverage reports
+htmlcov/
+.coverage
+
+# Ignore pytest cache
+.cache/
+
+# Ignore system files
+.DS_Store
+Thumbs.db
