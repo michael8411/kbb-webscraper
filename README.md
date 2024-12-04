@@ -61,10 +61,6 @@ Generates detailed logs for monitoring, debugging, and performance analysis.
 
 Includes a suite of unit tests to validate functionality and ensure code reliability.
 
-## Project Structure
-
-kbb-vehicle-data-scraper/ ├── data/ │ └── kbb_vehicle_data.json ├── docs/ │ └── README.md ├── logs/ │ ├── scraper_YYYYMMDD_HHMMSS.log │ └── ... ├── src/ │ ├── init.py │ ├── config.ini │ ├── data_processing.py │ ├── scraper.py │ └── utils.py ├── tests/ │ ├── init.py │ ├── test_data_processing.py │ ├── test_scraper.py │ └── test_utils.py ├── .env ├── .gitignore ├── LICENSE ├── README.md └── requirements.txt
-
 ## Installation
 
 ### Prerequisites
