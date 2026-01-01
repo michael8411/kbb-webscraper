@@ -1,6 +1,10 @@
-# scraper.py
-
+import sys
 import os
+
+# Add the 'src' directory to the python path
+current_dir = os.path.dirname(os.path.abspath(__file__))
+sys.path.append(current_dir)
+
 import re
 import time
 import random
@@ -21,6 +25,7 @@ from utils import (
 )
 
 from data_processing import load_existing_data, compare_and_update_data, save_data
+from db.operations import upsert_vehicle_batch
 
 logger = logging.getLogger(__name__)
 
@@ -358,15 +363,30 @@ def scrape_kbb_car_finder():
             f"Page {page} Results: {len(updated)} Updated, {len(added)} Added, {len(removed)} Removed"
         )
 
-        os.makedirs(os.path.dirname(data_file_path), exist_ok=True)
-        save_data(data_file_path, all_vehicle_data)
+        if page_data:
+            logger.info(f"Syncing {len(page_data)} vehicles to database")
+            # This pushes the cleaned, validated data to the database
+            upserted_count = upsert_vehicle_batch(page_data)
+            logger.info(f"Successfully upserted {upserted_count} vehicles to database")
+
+        # Optimize Save Frequency: Only save local JSON every 10 pages to save disk I/O
+        if page % 10 == 0:
+            os.makedirs(os.path.dirname(data_file_path), exist_ok=True)
+            save_data(data_file_path, all_vehicle_data)
+            logger.info("Checkpoint: Saved local JSON backup.")
 
         duration = time.time() - page_start_time
         logger.info(f"Processed page {page} in {duration:.2f}s")
 
-        delay = random.uniform(20, 60)
-        logger.info(f"Sleeping {delay:.2f}s before next page...")
-        time.sleep(delay)
+        # Long break every 50 pages to mimic human behavior
+        if page % 50 == 0:
+            long_sleep = random.uniform(300, 600)  # 5-10 minutes
+            logger.info(f"Taking a long break of {long_sleep/60:.2f} minutes...")
+            time.sleep(long_sleep)
+        else:
+            delay = random.uniform(20, 60)
+            logger.info(f"Sleeping {delay:.2f}s before next page...")
+            time.sleep(delay)
 
         page += 1
 

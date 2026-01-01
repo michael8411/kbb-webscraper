@@ -6,6 +6,7 @@ from typing import Dict, Any, Tuple, List
 
 logger = logging.getLogger(__name__)
 
+
 def load_existing_data(file_path: str) -> Dict[str, Any]:
     """
     Load existing data from a JSON file.
@@ -17,7 +18,7 @@ def load_existing_data(file_path: str) -> Dict[str, Any]:
         Dict[str, Any]: A dictionary containing the loaded data.
     """
     try:
-        with open(file_path, 'r') as f:
+        with open(file_path, "r") as f:
             data = json.load(f)
             logger.info(f"Loaded existing data from {file_path}")
             logger.debug(f"Loaded data contains {len(data)} entries")
@@ -32,10 +33,9 @@ def load_existing_data(file_path: str) -> Dict[str, Any]:
         logger.error(f"Unexpected error loading data from {file_path}: {e}")
         return {}
 
+
 def compare_and_update_data(
-    all_data: Dict[str, Any],
-    new_page_data: Dict[str, Any],
-    page_number: int
+    all_data: Dict[str, Any], new_page_data: Dict[str, Any], page_number: int
 ) -> Tuple[List[str], List[str], List[str]]:
     """
     Compare new data with existing data and update intelligently.
@@ -56,7 +56,9 @@ def compare_and_update_data(
     removed = []
 
     # Identify existing entries for this page
-    existing_page_keys = [key for key in all_data if key.startswith(f"page_{page_number}_")]
+    existing_page_keys = [
+        key for key in all_data if key.startswith(f"page_{page_number}_")
+    ]
 
     # Check for updated or new entries
     for key, new_entry in new_page_data.items():
@@ -84,6 +86,7 @@ def compare_and_update_data(
 
     return updated, added, removed
 
+
 def save_data(file_path: str, data: Dict[str, Any]) -> None:
     """
     Save data to a JSON file.
@@ -93,7 +96,7 @@ def save_data(file_path: str, data: Dict[str, Any]) -> None:
         data (Dict[str, Any]): The data to be saved.
     """
     try:
-        with open(file_path, 'w') as f:
+        with open(file_path, "w") as f:
             json.dump(data, f, indent=2)
         logger.info(f"Data saved to {file_path}")
         logger.debug(f"Saved data contains {len(data)} entries")
